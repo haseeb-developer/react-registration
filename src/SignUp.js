@@ -58,15 +58,29 @@ const SignUp = () => {
   };
 
   const validateEmail = (email) => {
+    if (/\s/.test(email)) {
+      return "There should be no spaces in the email.";
+    }
+
     const emailParts = email.split("@");
+
+    if (emailParts.length === 1) {
+      return "Please enter your email address first.";
+    } else if (emailParts.length > 2) {
+      return "Invalid email format.";
+    }
+
+    if (emailParts[0].length < 4) {
+      return "You must have at least 4 characters before the '@'.";
+    }
+
     if (emailParts.length === 2) {
       const domain = `@${emailParts[1]}`;
       if (domain !== selectedDomain) {
         return `Email must end with ${selectedDomain}.`;
       }
-    } else if (emailParts.length > 2) {
-      return "Invalid email format.";
     }
+
     return "";
   };
 
@@ -159,7 +173,6 @@ const SignUp = () => {
     e.preventDefault();
     if (!errors.username && !errors.email && !errors.confirmPassword) {
       localStorage.setItem("username", username);
-
       navigate("/dashboard");
     }
   };
