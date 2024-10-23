@@ -22,7 +22,9 @@ const Dashboard = () => {
   return (
     <div className="dashboard-container">
       <h1>Welcome to your Dashboard, {username}!</h1>
-      <button onClick={handleLogout}>Logout</button>
+      <button onClick={handleLogout} className="logoutbtn">
+        Logout
+      </button>
     </div>
   );
 };
