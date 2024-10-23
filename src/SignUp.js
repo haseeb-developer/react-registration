@@ -184,6 +184,13 @@ const SignUp = () => {
           </div>
 
           <div className="inputField domainInput">
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={handleEmailChange}
+              required
+            />
             <select onChange={handleDomainChange} value={selectedDomain}>
               <option value="@gmail.com">@gmail.com</option>
               <option value="@yahoo.com">@yahoo.com</option>
@@ -192,13 +199,6 @@ const SignUp = () => {
               <option value="@live.com">@live.com</option>
               <option value="@custom.com">@custom.com</option>
             </select>
-            <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={handleEmailChange}
-              required
-            />
           </div>
           {errors.email && <span className="error">{errors.email}</span>}
 
