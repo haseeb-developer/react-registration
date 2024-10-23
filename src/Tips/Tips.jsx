@@ -13,7 +13,8 @@ const Tips = () => {
         <li className="tip-item">Offensive usernames are not allowed.</li>
         <li className="tip-item">Special character are not allowed.</li>
         <li className="tip-item">
-          If your domain not matching with the input, It won't let you proceed.
+          If your domain (From Select Box) not matching with the input, It won't
+          let you proceed.
         </li>
       </ul>
     </div>
