@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   AiFillCheckCircle,
   AiFillCloseCircle,
@@ -57,32 +57,33 @@ const SignUp = () => {
     return "";
   };
 
-  const validateEmail = (email) => {
-    if (/\s/.test(email)) {
-      return "There should be no spaces in the email.";
-    }
+  const validateEmail = useCallback(
+    (email) => {
+      if (/\s/.test(email)) {
+        return "There should be no spaces in the email.";
+      }
 
-    const emailParts = email.split("@");
+      const emailParts = email.split("@");
+      if (emailParts.length === 1) {
+        return "Please enter your email address first.";
+      } else if (emailParts.length > 2) {
+        return "Invalid email format.";
+      }
 
-    if (emailParts.length === 1) {
-      return "Please enter your email address first.";
-    } else if (emailParts.length > 2) {
-      return "Invalid email format.";
-    }
+      const prefix = emailParts[0];
+      if (prefix.length < 4 || /^\d+$/.test(prefix)) {
+        return "You must have at least 4 non-numeric characters before the '@'.";
+      }
 
-    if (emailParts[0].length < 4) {
-      return "You must have at least 4 characters before the '@'.";
-    }
-
-    if (emailParts.length === 2) {
       const domain = `@${emailParts[1]}`;
       if (domain !== selectedDomain) {
         return `Email must end with ${selectedDomain}.`;
       }
-    }
 
-    return "";
-  };
+      return "";
+    },
+    [selectedDomain]
+  );
 
   const handleUsernameChange = (e) => {
     const name = e.target.value;
@@ -145,11 +146,13 @@ const SignUp = () => {
   };
 
   useEffect(() => {
+    const emailError = validateEmail(email);
+
     const isValid =
       username &&
       !errors.username &&
       email &&
-      !errors.email &&
+      !emailError &&
       password &&
       password.length >= 8 &&
       /[!@#$%^&*]/.test(password) &&
@@ -166,7 +169,7 @@ const SignUp = () => {
     password,
     confirmPassword,
     errors.username,
-    errors.email,
+    validateEmail,
   ]);
 
   const handleSubmit = (e) => {
@@ -289,7 +292,7 @@ const SignUp = () => {
               ) : (
                 <AiFillCloseCircle className="invalid" />
               )}
-              Must have a lowercase letter
+              Must have a lower case letter
             </div>
             <div className="requirement">
               {!/\s/.test(password) ? (
@@ -297,17 +300,7 @@ const SignUp = () => {
               ) : (
                 <AiFillCloseCircle className="invalid" />
               )}
-              Spaces are not allowed in the password
-            </div>
-            <div className="requirement">
-              {!/^(password|123456|123456789|12345|12345678|qwerty|abc123|letmein|monkey|111111|iloveyou|admin|welcome|password1)$/i.test(
-                password
-              ) ? (
-                <AiFillCheckCircle className="valid" />
-              ) : (
-                <AiFillCloseCircle className="invalid" />
-              )}
-              Avoid common passwords (e.g., "password", "123456")
+              Must not contain spaces
             </div>
           </div>
 

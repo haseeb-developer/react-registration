@@ -11,6 +11,9 @@ const Tips = () => {
           the middle.
         </li>
         <li className="tip-item">Offensive usernames are not allowed.</li>
+        <li className="tip-item">
+          Numbers before '@' in email field are not allowed.
+        </li>
         <li className="tip-item">Special character are not allowed.</li>
         <li className="tip-item">
           If your domain (From Select Box) not matching with the input, It won't
