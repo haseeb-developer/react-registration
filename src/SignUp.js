@@ -18,14 +18,20 @@ const SignUp = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
 
+  const [dobDay, setDobDay] = useState("");
+  const [dobMonth, setDobMonth] = useState("");
+  const [dobYear, setDobYear] = useState("");
+
   const [errors, setErrors] = useState({
     username: "",
     email: "",
     password: "",
     confirmPassword: "",
+    dob: "",
   });
 
   const [isButtonDisabled, setButtonDisabled] = useState(true);
+  const [age, setAge] = useState(null);
   const navigate = useNavigate();
 
   const offensiveRegex =
@@ -84,6 +90,18 @@ const SignUp = () => {
     },
     [selectedDomain]
   );
+
+  const validateDOB = (day, month, year) => {
+    const today = new Date();
+    const birthDate = new Date(year, month - 1, day);
+    const age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+
+    if (age < 13 || (age === 13 && monthDiff < 0)) {
+      return "You must be at least 13 years old to register.";
+    }
+    return "";
+  };
 
   const handleUsernameChange = (e) => {
     const name = e.target.value;
@@ -147,6 +165,7 @@ const SignUp = () => {
 
   useEffect(() => {
     const emailError = validateEmail(email);
+    const dobError = validateDOB(dobDay, dobMonth, dobYear);
 
     const isValid =
       username &&
@@ -160,9 +179,28 @@ const SignUp = () => {
       /[0-9]/.test(password) &&
       /[a-z]/.test(password) &&
       !/\s/.test(password) &&
-      confirmPassword === password;
+      confirmPassword === password &&
+      dobDay &&
+      dobMonth &&
+      dobYear &&
+      !dobError;
 
     setButtonDisabled(!isValid);
+
+    if (dobDay && dobMonth && dobYear) {
+      const today = new Date();
+      const birthDate = new Date(dobYear, dobMonth - 1, dobDay);
+      const calculatedAge = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dobDay)) {
+        setAge(calculatedAge - 1);
+      } else {
+        setAge(calculatedAge);
+      }
+    } else {
+      setAge(null);
+    }
   }, [
     username,
     email,
@@ -170,11 +208,19 @@ const SignUp = () => {
     confirmPassword,
     errors.username,
     validateEmail,
+    dobDay,
+    dobMonth,
+    dobYear,
   ]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!errors.username && !errors.email && !errors.confirmPassword) {
+    if (
+      !errors.username &&
+      !errors.email &&
+      !errors.confirmPassword &&
+      !errors.dob
+    ) {
       localStorage.setItem("username", username);
       navigate("/dashboard");
     }
@@ -253,6 +299,51 @@ const SignUp = () => {
             <span className="error">{errors.confirmPassword}</span>
           )}
 
+          <div className="dob-container">
+            <div className="dob-inputs">
+              <select
+                value={dobDay}
+                onChange={(e) => setDobDay(e.target.value)}
+                required
+              >
+                <option value="">Day</option>
+                {[...Array(31)].map((_, index) => (
+                  <option key={index} value={index + 1}>
+                    {index + 1}
+                  </option>
+                ))}
+              </select>
+              <select
+                value={dobMonth}
+                onChange={(e) => setDobMonth(e.target.value)}
+                required
+              >
+                <option value="">Month</option>
+                {[...Array(12)].map((_, index) => (
+                  <option key={index} value={index + 1}>
+                    {index + 1}
+                  </option>
+                ))}
+              </select>
+              <select
+                value={dobYear}
+                onChange={(e) => setDobYear(e.target.value)}
+                required
+              >
+                <option value="">Year</option>
+                {Array.from({ length: 100 }, (_, i) => 2024 - i).map((year) => (
+                  <option key={year} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </select>
+            </div>
+            {errors.dob && <span className="error">{errors.dob}</span>}
+            {age !== null && (
+              <span className="age-display">You're {age} years old.</span>
+            )}
+          </div>
+
           <div className="password-requirements">
             <div className="requirement">
               {password.length >= 8 ? (
@@ -260,7 +351,7 @@ const SignUp = () => {
               ) : (
                 <AiFillCloseCircle className="invalid" />
               )}
-              Password should be at least 8 characters long
+              Password should be at least 8 characters long.
             </div>
             <div className="requirement">
               {/[!@#$%^&*]/.test(password) ? (
@@ -276,7 +367,7 @@ const SignUp = () => {
               ) : (
                 <AiFillCloseCircle className="invalid" />
               )}
-              Must have an upper case letter
+              Must have an upper case letter.
             </div>
             <div className="requirement">
               {/[0-9]/.test(password) ? (
@@ -284,7 +375,7 @@ const SignUp = () => {
               ) : (
                 <AiFillCloseCircle className="invalid" />
               )}
-              Must have a number
+              Must have a number.
             </div>
             <div className="requirement">
               {/[a-z]/.test(password) ? (
@@ -292,7 +383,7 @@ const SignUp = () => {
               ) : (
                 <AiFillCloseCircle className="invalid" />
               )}
-              Must have a lower case letter
+              Must have a lower case letter.
             </div>
             <div className="requirement">
               {!/\s/.test(password) ? (
@@ -300,7 +391,15 @@ const SignUp = () => {
               ) : (
                 <AiFillCloseCircle className="invalid" />
               )}
-              Must not contain spaces
+              Password must not contain spaces.
+            </div>
+            <div className="requirement">
+              {age >= 13 ? (
+                <AiFillCheckCircle className="valid" />
+              ) : (
+                <AiFillCloseCircle className="invalid" />
+              )}
+              User must be at least 13+
             </div>
           </div>
 
