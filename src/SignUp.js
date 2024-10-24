@@ -35,7 +35,7 @@ const SignUp = () => {
   const navigate = useNavigate();
 
   const offensiveRegex =
-    /(?:fuck|shit|bitch|asshole|dick|cunt|nigger|faggot|whore|slut|idiot|retard|crazy|dumb|[^a-zA-Z0-9_])/i;
+    /(?:fuck|shit|bitch|asshole|dick|cunt|nigger|faggot|whore|slut|idiot|retard|crazy|dumb|fu_ck|bit__ch|benchod|crazy|facker|sucker|sh_it|lmao|rofl|damn|holyshit|holy_shit|idiot|shhit|shhhit|shhhhit|fuc-er[^a-zA-Z0-9_])/i;
 
   const isOffensive = (name) => {
     return offensiveRegex.test(name);
@@ -105,12 +105,14 @@ const SignUp = () => {
 
   const handleUsernameChange = (e) => {
     const name = e.target.value;
-    const underscoreCount = (name.match(/_/g) || []).length;
-    if (underscoreCount >= 1 && name.endsWith("_")) {
-      return;
-    }
-    setUsername(name);
-    const error = validateUsername(name);
+
+    const newName = name.replace(offensiveRegex, (match) => {
+      return "#".repeat(match.length);
+    });
+
+    setUsername(newName);
+
+    const error = validateUsername(newName);
     setErrors((prev) => ({ ...prev, username: error }));
   };
 
@@ -399,7 +401,7 @@ const SignUp = () => {
               ) : (
                 <AiFillCloseCircle className="invalid" />
               )}
-              User must be at least 13+
+              User must be at least 13 years old.
             </div>
           </div>
 
