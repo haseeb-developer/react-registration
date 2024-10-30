@@ -1,16 +1,82 @@
 .dashboard-container {
-  max-width: 900px;
+  max-width: 800px;
   margin: auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  margin-top: 50px;
-  border-radius: 5px;
-  background-color: #f9f9f9;
+  padding: 30px;
+  margin-top: 80px;
+  background: linear-gradient(135deg, #6e45e2 0%, #88d3ce 100%);
+  border-radius: 15px;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+  color: #ffffff;
   text-align: center;
+  font-family: 'Arial', sans-serif;
+  animation: slide-in 0.8s ease-out;
 }
 
-.logoutbtn {
-  margin-top: 50px;
-  max-width: fit-content;
-  padding: 10px 30px;
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.greeting-box h1 {
+  font-size: 2.5em;
+  margin-bottom: 10px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.greeting-box p {
+  font-size: 1.2em;
+  color: #e3e3e3;
+}
+
+.info-section {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 15px;
+  margin-top: 20px;
+  border-radius: 10px;
+  font-size: 1.1em;
+}
+
+.info-section p {
+  color: #f9f9f9;
+}
+
+.stats-section {
+  background-color: rgba(255, 255, 255, 0.15);
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 10px;
+}
+
+.stats-section h2 {
+  font-size: 1.8em;
+  margin-bottom: 15px;
+}
+
+.stats-section p {
+  font-size: 1.2em;
+  color: #e0e0e0;
+  margin: 5px 0;
+}
+
+.logout-btn {
+  margin-top: 30px;
+  padding: 12px 28px;
+  border: none;
+  border-radius: 8px;
+  background-color: #ff5f6d;
+  color: #fff;
+  font-size: 1.1em;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.logout-btn:hover {
+  background-color: #ff3e50;
 }

@@ -1,0 +1,18 @@
+.requirement {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.valid {
+  color: #4caf50;
+  margin-right: 10px;
+  font-size: 25px;
+}
+
+.invalid {
+  color: #f44336;
+  font-size: 25px;
+  margin-right: 10px;
+}

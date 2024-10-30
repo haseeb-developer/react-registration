@@ -1,5 +1,5 @@
-import React from "react";
-import "./Tips.css";
+import React from 'react';
+import './Tips.css';
 
 const Tips = () => {
   return (
@@ -19,6 +19,7 @@ const Tips = () => {
         </li>
         <li className="tip-item">Offensive usernames are not allowed.</li>
         <li className="tip-item">Special character are not allowed.</li>
+        <li className="tip-item">You must be 13+ to make an account.</li>
       </ul>
     </div>
   );

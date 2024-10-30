@@ -1,33 +1,34 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from 'react';
+import PasswordStrengthBar from 'react-password-strength-bar';
 import {
   AiFillCheckCircle,
   AiFillCloseCircle,
   AiFillEye,
   AiFillEyeInvisible,
-} from "react-icons/ai";
-import { useNavigate } from "react-router-dom";
-import Tips from "./Tips/Tips";
-import "./SignUp.css";
+} from 'react-icons/ai';
+import { useNavigate } from 'react-router-dom';
+import Tips from './Tips/Tips';
+import './SignUp.css';
 
 const SignUp = () => {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [selectedDomain, setSelectedDomain] = useState("@gmail.com");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [selectedDomain, setSelectedDomain] = useState('@gmail.com');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
 
-  const [dobDay, setDobDay] = useState("");
-  const [dobMonth, setDobMonth] = useState("");
-  const [dobYear, setDobYear] = useState("");
+  const [dobDay, setDobDay] = useState('');
+  const [dobMonth, setDobMonth] = useState('');
+  const [dobYear, setDobYear] = useState('');
 
   const [errors, setErrors] = useState({
-    username: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    dob: "",
+    username: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    dob: '',
   });
 
   const [isButtonDisabled, setButtonDisabled] = useState(true);
@@ -43,37 +44,37 @@ const SignUp = () => {
 
   const validateUsername = (name) => {
     if (isOffensive(name)) {
-      return "This username is not allowed due to offensive content.";
+      return 'This username is not allowed due to offensive content.';
     }
 
     const isValidFormat = /^[a-zA-Z0-9]+(_[a-zA-Z0-9]+)?$/.test(name);
     if (!isValidFormat) {
-      return "Only letters, numbers, and one underscore are allowed.";
+      return 'Only letters, numbers, and one underscore are allowed.';
     }
 
-    if (name.startsWith("_") || name.endsWith("_")) {
-      return "Username cannot start or end with an underscore.";
+    if (name.startsWith('_') || name.endsWith('_')) {
+      return 'Username cannot start or end with an underscore.';
     }
 
     const underscoreCount = (name.match(/_/g) || []).length;
     if (underscoreCount > 1) {
-      return "Only one underscore is allowed in the username.";
+      return 'Only one underscore is allowed in the username.';
     }
 
-    return "";
+    return '';
   };
 
   const validateEmail = useCallback(
     (email) => {
       if (/\s/.test(email)) {
-        return "There should be no spaces in the email.";
+        return 'There should be no spaces in the email.';
       }
 
-      const emailParts = email.split("@");
+      const emailParts = email.split('@');
       if (emailParts.length === 1) {
-        return "Please enter your email address first.";
+        return 'Please enter your email address first.';
       } else if (emailParts.length > 2) {
-        return "Invalid email format.";
+        return 'Invalid email format.';
       }
 
       const prefix = emailParts[0];
@@ -86,7 +87,7 @@ const SignUp = () => {
         return `Email must end with ${selectedDomain}.`;
       }
 
-      return "";
+      return '';
     },
     [selectedDomain]
   );
@@ -98,16 +99,16 @@ const SignUp = () => {
     const monthDiff = today.getMonth() - birthDate.getMonth();
 
     if (age < 13 || (age === 13 && monthDiff < 0)) {
-      return "You must be at least 13 years old to register.";
+      return 'You must be at least 13 years old to register.';
     }
-    return "";
+    return '';
   };
 
   const handleUsernameChange = (e) => {
     const name = e.target.value;
 
     const newName = name.replace(offensiveRegex, (match) => {
-      return "#".repeat(match.length);
+      return '#'.repeat(match.length);
     });
 
     setUsername(newName);
@@ -124,7 +125,7 @@ const SignUp = () => {
       const error = validateEmail(inputEmail);
       setErrors((prev) => ({ ...prev, email: error }));
     } else {
-      setErrors((prev) => ({ ...prev, email: "" }));
+      setErrors((prev) => ({ ...prev, email: '' }));
     }
   };
 
@@ -132,11 +133,11 @@ const SignUp = () => {
     const newDomain = e.target.value;
     setSelectedDomain(newDomain);
 
-    const emailPrefix = email.split("@")[0];
+    const emailPrefix = email.split('@')[0];
     const newEmail = `${emailPrefix}${newDomain}`;
     setEmail(newEmail);
 
-    setErrors((prev) => ({ ...prev, email: "" }));
+    setErrors((prev) => ({ ...prev, email: '' }));
   };
 
   const handlePasswordChange = (e) => {
@@ -145,10 +146,10 @@ const SignUp = () => {
     if (pass !== confirmPassword) {
       setErrors((prev) => ({
         ...prev,
-        confirmPassword: "Your password is not matching.",
+        confirmPassword: 'Your password is not matching.',
       }));
     } else {
-      setErrors((prev) => ({ ...prev, confirmPassword: "" }));
+      setErrors((prev) => ({ ...prev, confirmPassword: '' }));
     }
   };
 
@@ -158,10 +159,10 @@ const SignUp = () => {
     if (password !== pass) {
       setErrors((prev) => ({
         ...prev,
-        confirmPassword: "Your password is not matching.",
+        confirmPassword: 'Your password is not matching.',
       }));
     } else {
-      setErrors((prev) => ({ ...prev, confirmPassword: "" }));
+      setErrors((prev) => ({ ...prev, confirmPassword: '' }));
     }
   };
 
@@ -223,8 +224,8 @@ const SignUp = () => {
       !errors.confirmPassword &&
       !errors.dob
     ) {
-      localStorage.setItem("username", username);
-      navigate("/dashboard");
+      localStorage.setItem('username', username);
+      navigate('/dashboard');
     }
   };
 
@@ -268,7 +269,7 @@ const SignUp = () => {
 
           <div className="inputField password-input">
             <input
-              type={passwordVisible ? "text" : "password"}
+              type={passwordVisible ? 'text' : 'password'}
               placeholder="Password"
               value={password}
               onChange={handlePasswordChange}
@@ -282,9 +283,9 @@ const SignUp = () => {
             </span>
           </div>
 
-          <div className="inputField password-input">
+          <div className="inputField password-input cpassword">
             <input
-              type={confirmPasswordVisible ? "text" : "password"}
+              type={confirmPasswordVisible ? 'text' : 'password'}
               placeholder="Confirm Password"
               value={confirmPassword}
               onChange={handleConfirmPasswordChange}
@@ -297,6 +298,9 @@ const SignUp = () => {
               {confirmPasswordVisible ? <AiFillEyeInvisible /> : <AiFillEye />}
             </span>
           </div>
+
+          <PasswordStrengthBar password={password} />
+
           {errors.confirmPassword && (
             <span className="error">{errors.confirmPassword}</span>
           )}
